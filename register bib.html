@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BiblioTrop — Créer un compte</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#1c1a14;--paper:#f5f0e8;--cream:#fdfaf4;--line:#d8d2c4;--forest:#2d5a3d;--forest2:#3d7a52;--gold:#b8862a;--rust:#8a3a28;--mist:#8a8678;--r:8px;--ff:'Jost',sans-serif;--ffd:'Libre Baskerville',serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff);min-height:100vh;display:flex;align-items:center;justify-content:center}
+content:center;padding:20px;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(45,90,61,.07),transparent 65%);pointer-events:none}
+
+/* Card */
+.card{background:var(–cream);border:1px solid var(–line);border-radius:20px;padding:36px 40px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(28,26,20,.12);animation:up .5s ease both;position:relative}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px}
+.logo-mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(–forest2),var(–forest));display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px rgba(45,90,61,.35)}
+.logo-name{font-family:var(–ffd);font-size:20px;font-weight:700;color:var(–ink)}
+.logo-name span{color:var(–forest2)}
+
+/* Title */
+.ttl{font-family:var(–ffd);font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:var(–mist);text-align:center;margin-bottom:28px}
+
+/* Steps */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.step::after{content:’’;position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:var(–line);transition:background .3s}
+.step:last-child::after{display:none}
+.step.done::after{background:var(–forest)}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(–line);background:var(–cream);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(–mist);transition:all .3s;z-index:1}
+.step.active .step-dot{border-color:var(–forest);background:var(–forest);color:#fff}
+.step.done .step-dot{border-color:var(–forest);background:var(–forest);color:#fff}
+.step-lbl{font-size:10px;color:var(–mist);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.step.active .step-lbl{color:var(–forest);font-weight:700}
+
+/* Steps content */
+.step-content{display:none}.step-content.active{display:block;animation:up .35s ease both}
+
+/* Fields */
+.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fld label{font-size:11px;font-weight:700;color:var(–ink);text-transform:uppercase;letter-spacing:.07em}
+.inp-wrap{position:relative}
+.inp-wrap .ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;transition:color .2s;color:var(–mist)}
+.inp-wrap.ta .ico{top:14px;transform:none}
+input,select,textarea{width:100%;padding:11px 14px;border:1.5px solid var(–line);border-radius:var(–r);font-size:14px;background:var(–paper);color:var(–ink);outline:none;transition:all .2s;font-family:var(–ff)}
+.has-ico input,.has-ico select{padding-left:40px}
+input:focus,select:focus,textarea:focus{border-color:var(–forest);background:var(–cream);box-shadow:0 0 0 3px rgba(45,90,61,.1)}
+input::placeholder,textarea::placeholder{color:var(–line)}
+select{cursor:pointer;appearance:none;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘8’ viewBox=‘0 0 12 8’%3E%3Cpath d=‘M1 1l5 5 5-5’ stroke=’%238a8678’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 14px center}
+.err{border-color:var(–rust)!important;box-shadow:0 0 0 3px rgba(138,58,40,.1)!important}
+.err-msg{font-size:12px;color:var(–rust);margin-top:3px;display:none}
+.err-msg.show{display:block;animation:up .2s ease}
+
+/* Password strength */
+.pwd-bar{height:4px;border-radius:2px;background:var(–line);margin-top:6px;overflow:hidden}
+.pwd-fill{height:100%;border-radius:2px;width:0;transition:width .3s,background .3s}
+.pwd-hint{font-size:11px;color:var(–mist);margin-top:4px}
+
+/* Row */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Role cards */
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.role-opt{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(–r);border:1.5px solid var(–line);background:var(–paper);cursor:pointer;transition:all .2s;font-size:13px;color:var(–mist);font-weight:500}
+.role-opt:hover{border-color:var(–forest);color:var(–ink)}
+.role-opt.sel{border-color:var(–forest);background:rgba(45,90,61,.07);color:var(–forest);font-weight:600}
+.role-opt input{display:none}
+
+/* Avatar picker */
+.av-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.av-opt{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border:2px solid var(–line);transition:all .2s}
+.av-opt:hover{border-color:var(–forest);transform:scale(1.1)}
+.av-opt.sel{border-color:var(–forest);box-shadow:0 0 0 3px rgba(45,90,61,.2)}
+
+/* Checkbox */
+.check-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(–mist);margin-bottom:14px;cursor:pointer}
+.check-row input[type=checkbox]{width:16px;height:16px;accent-color:var(–forest);flex-shrink:0;margin-top:1px;cursor:pointer}
+.check-row a{color:var(–forest);font-weight:500}
+
+/* Summary */
+.summary{background:var(–paper);border:1px solid var(–line);border-radius:var(–r);padding:16px;margin-bottom:18px}
+.sum-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(–line);font-size:13px}
+.sum-row:last-child{border:none}
+.sum-key{color:var(–mist)}
+.sum-val{font-weight:600}
+
+/* Buttons */
+.btn-row{display:flex;gap:10px;margin-top:4px}
+.btn{flex:1;padding:12px;border-radius:var(–r);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(–ff)}
+.btn-forest{background:var(–forest);color:#fff}
+.btn-forest:hover{background:var(–forest2);box-shadow:0 4px 16px rgba(45,90,61,.4);transform:translateY(-1px)}
+.btn-forest:active{transform:none}
+.btn-forest:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-outline{background:none;border:1.5px solid var…
+    line);color:var(–ink3);flex:0 0 auto;padding:12px 18px}
+.btn-outline:hover{border-color:var(–forest);color:var(–forest)}
+
+/* Success screen */
+.success{text-align:center;padding:20px 0;display:none;animation:up .5s ease both}
+.success-icon{font-size:64px;margin-bottom:16px;display:block}
+.success h2{font-family:var(–ffd);font-size:1.5rem;margin-bottom:8px}
+.success p{color:var(–mist);font-size:14px;margin-bottom:24px;line-height:1.6}
+
+/* Footer */
+.form-footer{text-align:center;margin-top:20px;font-size:13px;color:var(–mist)}
+.form-footer a{color:var(–forest);font-weight:600}
+
+/* Loader */
+.spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:520px){.card{padding:24px 20px}.row2{grid-template-columns:1fr}.role-grid{grid-template-columns:1fr 1fr}}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Logo -->
+
+  <div class="logo">
+    <div class="logo-mark">📚</div>
+    <div class="logo-name">Biblio<span>Trop</span></div>
+  </div>
+
+  <!-- Steps indicator -->
+
+  <div class="steps">
+    <div class="step active" id="st1"><div class="step-dot" id="sd1">1</div><div class="step-lbl">Compte</div></div>
+    <div class="step" id="st2"><div class="step-dot" id="sd2">2</div><div class="step-lbl">Profil</div></div>
+    <div class="step" id="st3"><div class="step-dot" id="sd3">3</div><div class="step-lbl">Confirmation</div></div>
+  </div>
+
+  <!-- STEP 1 — Informations de connexion -->
+
+  <div class="step-content active" id="sc1">
+    <div class="ttl">Créer un compte</div>
+    <div class="sub">Renseignez vos informations de connexion</div>
+
+
+<div class="row2">
+  <div class="fld">
+    <label>Prénom *</label>
+    <div class="inp-wrap has-ico"><span class="ico">👤</span><input id="prenom" type="text" placeholder="Jean" oninput="validate('prenom')"/></div>
+    <span class="err-msg" id="err-prenom">Prénom requis</span>
+  </div>
+  <div class="fld">
+    <label>Nom *</label>
+    <div class="inp-wrap has-ico"><span class="ico">👤</span><input id="nom" type="text" placeholder="Dupont" oninput="validate('nom')"/></div>
+    <span class="err-msg" id="err-nom">Nom requis</span>
+  </div>
+</div>
+
+<div class="fld">
+  <label>Adresse email *</label>
+  <div class="inp-wrap has-ico"><span class="ico">✉️</span><input id="email" type="email" placeholder="jean.dupont@universite.edu" oninput="validate('email')"/></div>
+  <span class="err-msg" id="err-email">Email invalide</span>
+</div>
+
+<div class="fld">
+  <label>Mot de passe *</label>
+  <div class="inp-wrap has-ico"><span class="ico">🔒</span><input id="pwd" type="password" placeholder="Minimum 8 caractères" oninput="checkPwd(this.value)"/></div>
+  <div class="pwd-bar"><div class="pwd-fill" id="pwd-fill"></div></div>
+  <div class="pwd-hint" id="pwd-hint">Entrez un mot de passe</div>
+</div>
+
+<div class="fld">
+  <label>Confirmer le mot de passe *</label>
+  <div class="inp-wrap has-ico"><span class="ico">🔒
+    </span><input id="matricule" type="text" placeholder="Ex: 2024-ETU-001234"/></div>
+</div>
+
+<div class="fld">
+  <label>Choisir un avatar</label>
+  <div class="av-row" id="av-row">
+    <div class="av-opt sel" data-av="🧑‍🎓" onclick="selAv(this)" style="background:#2d5a3d22">🧑‍🎓</div>
+    <div class="av-opt" data-av="👩‍🎓" onclick="selAv(this)" style="background:#2a5a6e22">👩‍🎓</div>
+    <div class="av-opt" data-av="👨‍🏫" onclick="selAv(this)" style="background:#b8862a22">👨‍🏫</div>
+    <div class="av-opt" data-av="👩‍🏫" onclick="selAv(this)" style="background:#6e3a8a22">👩‍🏫</div>
+    <div class="av-opt" data-av="📚" 
+    onclick="selAv(this)" style="background:#8a3a2822">📚</div>
+    <div class="av-opt" data-av="🦉" onclick="selAv(this)" style="background:#3a6e5a22">🦉</div>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-outline" onclick="prevStep(2)">← Retour</button>
+  <button class="btn btn-forest" onclick="nextStep(2)">Continuer →</button>
+</div>
+
+
+  </div>
+
+  <!-- STEP 3 — Confirmation -->
+
+  <div class="step-content" id="sc3">
+    <div class="ttl">Confirmation</div>
+    <div class="sub">Vérifiez vos informations avant de créer votre compte</div>
+
+
+<div class="summary" id="summary"></div>
+
+<label class="check-row">
+  <input type="checkbox" id="cgu" onchange="checkCGU()"/>
+  J'accepte les <a href="#">Conditions d'utilisation</a> et la <a href="#">Politique de confidentialité</a> de BiblioTrop.
+</label>
+
+<label class="check-row">
+  <input type="checkbox" id="notifs"/>
+  Recevoir les notifications par email (nouveaux livres, rappels de retour…)
+</label>
+
+<div class="btn-row">
+  <button class="btn btn-outline" onclick="prevStep(3)">← Retour</button>
+  <button class="btn btn-forest" id="submit-btn" onclick="submitForm()" disabled style="opacity:.5;cursor:not-allowed">
+    Créer mon compte
+  </button>
+</div>
+
+
+  </div>
+
+  <!-- SUCCESS -->
+
+  <div class="success" id="success">
+    <span class="success-icon">🎉</span>
+    <h2>Compte créé avec succès !</h2>
+    <p>Bienvenue sur <strong>BiblioTrop</strong>.<br/>Un email de confirmation a été envoyé à <strong id="confirm-email"></strong>.</p>
+    <button class="btn btn-forest" style="width:100%;margin-bottom:12px" onclick="window.location.reload()">🏠 Accéder à la bibliothèque</button>
+    <a href="#" style="font-size:13px;color:var(--mist)">Renvoyer l'email de confirmation</a>
+  </div>
+
+  <div class="form-footer">
+    Déjà un compte ? <a href="#">Se connecter</a>
+  </div>
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BiblioTrop — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#1c1a14;--paper:#f5f0e8;--cream:#fdfaf4;
+  --line:#d8d2c4;--line2:#c4bdb0;
+  --forest:#2d5a3d;--forest2:#3d7a52;--forest3:rgba(45,90,61,.1);
+  --gold:#b8862a;--rust:#8a3a28;--mist:#8a8678;--mist2:#b4b0a4;
+  --r:8px;--r2:14px;--r3:22px;
+  --ff:'Jost',sans-serif;--ffd:'Libre Baskerville',serif;
+  --sh:0 20px 60px rgba(28,26,20,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--ff);font-size:14px;
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+
+/* ── LEFT PANEL ── */
+.left{
+background:var(–ink);
+display:flex;flex-direction:column;
+justify-content:space-between;
+padding:40px;position:relative;overflow:hidden;
+}
+.left::before{
+content:’’;position:absolute;inset:0;
+background:
+radial-gradient(ellipse 70% 50% at 30% 20%,rgba(45,90,61,.35),transparent),
+radial-gradient(ellipse 50% 60% at 80% 80%,rgba(184,134,42,.15),transparent);
+pointer-events:none;
+}
+/* Grain */
+.left::after{
+content:’’;position:absolute;inset:0;
+background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘200’ height=‘200’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=’.85’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘200’ height=‘200’ filter=‘url(%23n)’ opacity=’.025’/%3E%3C/svg%3E”);
+opacity:.5;pointer-events:none;
+}
+.left-content{position:relative;z-index:1}
+.left-foot{position:relative;z-index:1}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:60px}
+.logo-mark{
+width:42px;height:42px;border-radius:10px;
+background:linear-gradient(135deg,var(–forest2),var(–forest));
+display:flex;align-items:center;justify-content:center;
+font-size:22px;box-shadow:0 4px 16px rgba(45,90,61,.5);
+transition:transform .3s;
+}
+.logo-mark:hover{transform:rotate(-8deg) scale(1.08)}
+.logo-name{font-family:var(–ffd);font-size:22px;font-weight:700;color:#fff}
+.logo-name span{color:var(–forest2)}
+
+/* Hero text */
+.hero-tag{
+display:inline-flex;align-items:center;gap:7px;
+font-size:10px;font-family:monospace;color:rgba(255,255,255,.3);
+letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;
+}
+.live{width:6px;height:6px;border-radius:50%;background:var(–forest2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{
+font-family:var(–ffd);
+font-size:clamp(1.8rem,3.5vw,2.6rem);
+color:#fff;font-weight:700;
+line-height:1.2;margin-bottom:16px;
+}
+.hero-title em{color:var(–forest2);font-style:italic}
+.hero-sub{color:rgba(255,255,255,.42);font-size:14px;line-height:1.75;max-width:360px;margin-bottom:40px}
+
+/* Stats */
+.stats{display:flex;gap:28px}
+.stat{border-left:2px solid rgba(45,90,61,.4);padding-left:14px}
+.stat-num{font-family:var(–ffd);font-size:1.5rem;font-weight:700;color:var(–forest2);line-height:1}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.1em;font-family:monospace;margin-top:3px}
+
+/* Testimonial */
+.testi{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.07);
+border-radius:var(–r2);padding:20px;
+}
+.testi-txt{font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;font-style:italic;margin-bottom:12px}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(–forest2),var(–gold));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(–ink)}
+.testi-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.65)}
+.testi-role{font-size:11px;color:rgba(255,255,255,.28)}
+
+/* ── RIGHT PANEL ── */
+.right{
+display:flex;align-items:center;justify-content:center;
+padding:40px 32px;background:var(–cream);
+position:relative;
+}
+.right::before{
+content:’’;position:absolute;
+top:-60px;right:-60px;
+width:300px;height:300px;border-radius:50%;
+background:radial-gradient(circle,rgba(45,90,61,.06),transparent);
+pointer-events:none;
+}
+
+/* Form card */
+.form-wrap{width:100%;max-width:400px}
+.form-title{font-family:var(–ffd);font-size:1.7rem;font-weight:700;margin-bottom:6px}
+.form-sub{font-size:13px;color:var(–mist);margin-bottom:32px}
+
+/* Tabs (login / forgot) */
+.tab-row{display:flex;background:var(–paper);border:1px solid var(–line);border-radius:var(–r);padding:3px;margin-bottom:28px}
+.tab{flex:1;padding:8px;text-align:center;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;color:var(–mist);border:none;background:none;font-family:var(–ff)}
+.tab.active{background:var(–cream);color:var(–forest);box-shadow:0 2px 8px rgba(28,26,20,.08);font-weight:600}
+
+/* Fields */
+.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fld label{font-size:11px;font-weight:700;color:var(–ink);text-transform:uppercase;letter-spacing:.08em}
+.inp{position:relative}
+.inp-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(–mist2);pointer-events:none;transition:color .2s}
+.inp input{
+width:100%;padding:12px 14px 12px 42px;
+border:1.5px solid var(–line);border-radius:var(–r);
+font-size:14px;background:var(–paper);color:var(–ink);
+outline:none;transition:all .25s;font-family:var(–ff);
+}
+.inp input:focus{border-color:var(–forest);background:var(–cream);box-shadow:0 0 0 3px rgba(45,90,61,.1)}
+.inp input:focus~.inp-ico,.inp:focus-within .inp-ico{color:var(–forest)}
+.inp input::placeholder{color:var(–mist2)}
+.inp input.err{border-color:var(–rust);box-shadow:0 0 0 3px rgba(138,58,40,.1)}
+/* Eye toggle */
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;color:var(–mist2);transition:color .2s;background:none;border:none}
+.eye:hover{color:var(–ink)}
+
+/* Error message */
+.emsg{font-size:12px;color:var(–rust);margin-top:3px;display:none}
+.emsg.show{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Remember + forgot */
+.row-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.check-lbl{display:flex;align-items:center;gap:7px;font-size:13px;color:var(–mist);cursor:pointer}
+.check-lbl input{accent-color:var(–forest);width:15px;height:15px;cursor:pointer}
+.forgot{font-size:13px;color:var(–forest);font-weight:500;cursor:pointer;background:none;border:none;transition:color .15s}
+.forgot:hover{color:var(–forest2)}
+
+/* Submit button */
+.btn-submit{
+width:100%;padding:13px;border:none;border-radius:var(–r);
+background:var(–forest);color:#fff;font-size:14px;
+font-weight:700;cursor:pointer;transition:all .25s;
+display:flex;align-items:center;justify-content:center;gap:8px;
+font-family:var(–ff);position:relative;overflow:hidden;
+}
+.btn-submit::after{content:’’;position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .15s}
+.btn-submit:hover{background:var(–forest2);box-shadow:0 6px 20px rgba(45,90,61,.45);transform:translateY(-1px)}
+.btn-submit:active{transform:none;box-shadow:none}
+.btn-submit:active::after{background:rgba(255,255,255,.08)}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Spinner */
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(–mist2);font-size:12px}
+.divider::before,.divider::after{content:’’;flex:1;height:1px;background:var(–line)}
+
+/* Social buttons */
+.social-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-social{
+display:flex;align-items:center;justify-content:center;gap:8px;
+padding:11px;border:1.5px solid var(–line);border-radius:var(–r);
+background:var(–paper);font-size:13px;font-weight:500;
+cursor:pointer;transition:all .2s;color:var(–ink3);font-family:var(–ff);
+}
+.btn-social:hover{border-color:var(–forest);background:var(–forest3);color:var(–forest)}
+
+/* Error box */
+.err-box{
+background:rgba(138,58,40,.08);border:1px solid rgba(138,58,40,.2);
+border-left:3px solid var(–rust);
+border-radius:var(–r);padding:11px 14px;
+font-size:13px;color:var(–rust);
+display:none;margin-bottom:16px;
+animation:fi .3s ease;
+}
+.err-box.show{display:flex;align-items:center;gap:8px}
+
+/* Success box */
+.ok-box{
+background:rgba(45,90,61,.08);border:1px solid rgba(45,90,61,.2);
+border-left:3px solid var(–forest);
+border-radius:var(–r);padding:11px 14px;
+font-size:13px;color:var(–forest);
+display:none;margin-bottom:16px;animation:fi .3s ease;
+}
+.ok-box.show{display:flex;align-items:center;gap:8px}
+
+/* Footer */
+.form-footer{text-align:center;margin-top:24px;font-size:13px;color:var(–mist)}
+.form-footer a{color:var(–forest);font-weight:600;cursor:pointer}
+.form-footer a:hover{color:var(–forest2)}
+
+/* Quick accounts */
+.quick-accounts{margin-top:24px;padding-top:20px;border-top:1px solid var(–line)}
+.qa-title{font-size:11px;color:var(–mist2);text-align:center;margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+.qa-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.qa-btn{
+display:flex;align-items:center;gap:6px;
+padding:6px 12px;border:1px solid var(–line);
+border-radius:20px;font-size:12px;cursor:pointer;
+background:var(–paper);color:var(–ink3);
+transition:all .2s;font-family:var(–ff);
+}
+.qa-btn:hover{border-color:var(–forest);color:var(–forest);background:var(–forest3)}
+
+/* Forgot panel */
+.forgot-panel{display:none}
+.forgot-panel.show{display:block;animation:fi .35s ease}
+.back-btn{display:flex;align-items:center;gap:6px;color:var(–mist);font-size:13px;cursor:pointer;background:none;border:none;font-family:var(–ff);margin-bottom:24px;transition:color .15s}
+.back-btn:hover{color:var(–ink)}
+
+/* Success state */
+.success-state{display:none;text-align:center;padding:20px 0;animation:fi .5s ease}
+.success-state.show{display:block}
+.s-icon{font-size:56px;margin-bottom:16px;display:block}
+.s-title{font-family:var(–ffd);font-size:1.5rem;margin-bottom:8px}
+.s-desc{font-size:13px;color:var(–mist);line-height:1.7;margin-bottom:24px}
+
+/* Responsive */
+@media(max-width:860px){
+body{grid-template-columns:1fr}
+.left{display:none}
+}
+@media(max-width:480px){
+.right{padding:24px 20px}
+.social-row{grid-template-columns:1fr}
+.stats{gap:16px}
+}
+</style>
+
+</head>
+<body>
+
+<!-- ══════ LEFT PANEL ══════ -->
+
+<div class="left">
+  <div class="left-content">
+    <div class="logo">
+      <div class="logo-mark">📚</div>
+      <div class="logo-name">Biblio<span>Trop</span></div>
+    </div>
+    <div class="hero-tag"><span class="live"></span>Bibliothèque Numérique · Université Tropicale</div>
+    <h1 class="hero-title">Le savoir tropical,<br/><em>à portée de main</em></h1>
+    <p class="hero-sub">Accédez à des milliers de thèses, mémoires, articles et ouvrages des instituts universitaires des régions tropicales.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">4 820</div><div class="stat-lbl">Ouvrages</div></div>
+      <div class="stat"><div class="stat-num">890</div><div class="stat-lbl">Abonnés</div></div>
+      <div class="stat"><div class="stat-num">342</div><div class="stat-lbl">Emprunts actifs</div></div>
+    </div>
+  </div>
+  <div class="left-foot">
+    <div class="testi">
+      <div class="testi-txt">"BiblioTrop a transformé notre façon de gérer les ressources documentaires. Tout est fluide, rapide et accessible depuis n'importe quel appareil."</div>
+      <div class="testi-author">
+        <div class="testi-av">AA</div>
+        <div>
+          <div class="testi-name">Abena Asante</div>
+          <div class="testi-role">Bibliothécaire principale · University of Ghana</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RIGHT PANEL ══════ -->
+
+<div class="right">
+  <div class="form-wrap">
+
+
+<!-- LOGIN FORM -->
+<div id="login-form">
+  <div class="form-title">Bon retour 👋</div>
+  <div class="form-sub">Connectez-vous à votre espace bibliothèque</div>
+
+  <!-- Tabs -->
+  <div class="tab-row">
+    <button class="tab active" onclick="switchTab('password',this)">Mot de passe</button>
+    <button class="tab" onclick="switchTab('magic',this)">Lien magique</button>
+  </div>
+
+  <!-- Error / Success -->
+  <div class="err-box" id="err-box">❌ <span id="err-txt"></span></div>
+  <div class="ok-box" id="ok-box">✅ <span id="ok-txt"></span></div>
+
+  <!-- Tab: Password -->
+  <div id="tab-password">
+    <div class="fld">
+      <label>Adresse email</label>
+      <div class="inp">
+        <span class="inp-ico">✉️</span>
+        <input id="email" type="email" placeholder="vous@universite.edu"
+          oninput="clearErr();validateEmail(this.value)"
+          onkeydown="if(event.key==='Enter')tryLogin()"/>
+      </div>
+      <span class="emsg" id="err-email">Entrez une adresse email valide</span>
+    </div>
+
+    <div class="fld">
+      <label>Mot de passe</label>
+      <div class="inp">
+        <span class="inp-ico">🔒</span>
+        <input id="pwd" type="password" placeholder="Votre mot de passe"
+          oninput="clearErr()"
+          onkeydown="if(event.key==='Enter')tryLogin()"/>
+        <button class="eye" id="eye-btn" onclick="toggleEye()" type="button">👁️</button>
+      </div>
+      <span class="emsg" id="err-pwd">Mot de passe requis</span>
+    </div>
+
+    <div class="row-between">
+      <label class="check-lbl">
+        <input type="checkbox" id="remember"/> Se souvenir de moi
+      </label>
+      <button class="forgot" onclick="showForgot()">Mot de passe oublié ?</button>
+    </div>
+
+    <button class="btn-submit" id="login-btn" onclick="tryLogin()">
+      Se connecter
+    </button>
+  </div>
+
+  <!-- Tab: Magic link -->
+  <div id="tab-magic" style="display:none">
+    <p style="font-size:13px;color:var(--mist);margin-bottom:18px;line-height:1.6">Entrez votre email et nous vous enverrons un lien de connexion instantanée — sans mot de passe.</p>
+    <div class="fld">
+      <label>Adresse email</label>
+      <div class="inp">
+        <span class="inp-ico">✉️</span>
+        <input id="magic-email" type="email" placeholder="vous@universite.edu"/>
+      </div>
+    </div>
+    <button class="btn-submit" onclick="sendMagic()">✨ Envoyer le lien magique</button>
+  </div>
+
+  <div class="divider">ou continuer avec</div>
+
+  <div class="social-row">
+    <button class="btn-social" onclick="socialLogin('Google')">🌐 Google</button>
+    <button class="btn-social" onclick="socialLogin('Microsoft')">🪟 Microsoft</button>
+  </div>
+
+  <div class="form-footer">
+    Pas encore de compte ? <a href="bibliotrop-register.html">Créer un compte</a>
+  </div>
+
+  <!-- Quick test accounts -->
+  <div class="quick-accounts">
+    <div class="qa-title">Comptes de démonstration</div>
+    <div class="qa-row">
+      <button class="qa-btn" onclick="fillDemo('marie@univ-yde.cm','Enseignant')">👨‍🏫 Enseignant</button>
+      <button class="qa-btn" onclick="fillDemo('k.amon@uhb.edu.ci','Étudiant')">🎓 Étudiant</button>
+      <button class="qa-btn" onclick="fillDemo('a.asante@ug.edu.gh','Bibliothécaire')">📚 Bibliothécaire</button>
+      <button class="qa-btn" onclick="fillDemo('admin@bibliotrop.org','Admin')">⚙️ Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD PANEL -->
+<div id="forgot-panel" class="forgot-panel">
+  <button class="back-btn" onclick="hideForgot()">← Retour à la connexion</button>
+  <div class="form-title">Mot de passe oublié</div>
+  <div class="form-sub" style="margin-bottom:24px">Entrez votre email pour recevoir un lien de réinitialisation.</div>
+  <div class="ok-box" id="reset-ok" style="margin-bottom:16px"></div>
+  <div class="fld">
+    <label>Adresse email</label>
+    <div class="inp">
+      <span class="inp-ico">✉️</span>
+      <input id="reset-email" type="email" placeholder="vous@universite.edu"
+        onkeydown="if(event.key==='Enter')sendReset()"/>
+    </div>
+  </div>
+  <button class="btn-submit" onclick="sendReset()">📧 Envoyer le lien</button>
+</div>
+
+<!-- SUCCESS STATE -->
+<div id="success-state" class="success-state">
+  <span class="s-icon">🎉</span>
+  <div class="s-title">Connecté !</div>
+  <p class="s-desc">Bienvenue sur <strong>BiblioTrop</strong>.<br/>Redirection vers votre espace en cours…</p>
+  <div style="width:100%;height:4px;background:var(--line);border-radius:2px;overflow:hidden">
+    <div id="redirect-bar" style="height:100%;background:var(--forest);width:0;border-radius:2px;transition:width 2s linear"></div>
+  </div>
+</div>
+
+
+  </div>
+</div>
+
+</body>
+</html>

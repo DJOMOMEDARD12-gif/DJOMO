@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BiblioTrop — IHM</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--paper:#f5f0e8;--cream:#fdfaf4;--ink:#1c1a14;--mist:#8a8678;--line:#d8d2c4;--forest:#2d5a3d;--forest2:#3d7a52;--gold:#b8862a;--rust:#8a3a28;--r:8px;--r2:14px;--ff:'Jost',sans-serif;--ffd:'Libre Baskerville',serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff);font-size:14px;display:flex;min-height:100vh}
+/* Sidebar */
+.sb{width:240px;background:#1c1a14;display:flex;flex-direction:column;min-height:100vh}
+.sb-logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
+.sb-em{width:34px;height:34px;background:linear-gradient(135deg,var(--forest2),var(--forest));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.sb-name{font-family:var(--ffd);color:#fff;font-size:16px;font-weight:700}
+.sb-nav{flex:1;padding:14px 10px}
+.sb-g{font-size:9px;color:rgba(255,255,255,.2);letter-spacing:.12em;text-transform:uppercase;padding:12px 8px 4px;font-family:monospace}
+.sb-l{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.45);font-size:13px;font-weight:500;transition:all .18s;background:none;border:none;width:100%}
+.sb-l:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.sb-l.active{background:rgba(45,90,61,.3);color:#6dbb8a}
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--cream);border-bottom:1px solid var(--line);height:58px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.t-title{font-family:var(--ffd);font-size:17px;font-weight:700}
+.t-right{display:flex;align-items:center;gap:10px}
+.t-search{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:7px 12px;cursor:pointer;min-width:220px}
+.t-search input{background:none;border:none;outline:none;font-size:13px;color:var(--ink);cursor:pointer}
+.ib{width:36px;height:36px;border-radius:var(--r);background:var(--paper);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.ib:hover{border-color:var(--forest);color:var(--forest)}
+.u-chip{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:5px 14px 5px 6px;cursor:pointer}
+.u-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--forest2),#2a5a6e);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+/* Content */
+.content{flex:1;overflow-y:auto;padding:24px;background:var(--paper)}
+.sec{display:none}.sec.on{display:block;animation:fu .4s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--cream);border:1px solid var(--line);border-radius:var(--r2);padding:18px 20px;border-bottom:3px solid var(--c,var(--forest));transition:all .2s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(28,26,20,.12)}
+.kpi-n{font-family:var(--ffd);font-size:1.8rem;font-weight:700;line-height:1}
+.kpi-l{font-size:11px;color:var(--mist);text-transform:uppercase;letter-spacing:.07em;margin:4px 0 8px}
+.kpi-t{font-size:12px;font-weight:600}
+.up{color:var(--forest)}.dn{color:var(--rust)}
+/* Table */
+.tcard{background:var(--cream);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-bottom:20px}
+.thead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.fi{padding:7px 12px;border:1px solid var(--line);border-radius:var(--r);font-size:13px;background:var(--paper);outline:none}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:left;font-size:10px;color:var(--mist);font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--paper);border-bottom:1px solid var(--line);cursor:pointer}
+td{padding:11px 14px;border-bottom:1px solid var(--paper);font-size:13px}
+tr:hover td{background:var(--paper)}
+.st{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase}
+.s-d{background:rgba(45,90,61,.1);color:var(--forest);border:1px solid rgba(45,90,61,.2)}
+.s-e{background:rgba(138,58,40,.1);color:var(--rust);border:1px solid rgba(138,58,40,.2)}
+.s-a{background:rgba(184,134,42,.1);color:var(--gold);border:1px solid rgba(184,134,42,.2)}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:var(--r);font-size:13px;font-weight:600;transition:all .2s;cursor:pointer;border:none}
+.btn-f{background:var(--forest);color:#fff}.btn-f:hover{background:var(--forest2)}
+.btn-o{background:none;border:1px solid var(--line);color:var(--ink)}.btn-o:hover{border-color:var(--forest);color:var(--forest)}
+/* Modal */
+.mo{position:fixed;inset:0;background:rgba(28,26,20,.55);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.mo.on{display:flex}
+.mc{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:28px;width:100%;max-width:520px;box-shadow:0 20px 80px rgba(28,26,20,.24);animation:fu .3s ease both}
+.mc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line);font-family:var(--ffd);font-size:17px;font-weight:700}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fld label{font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+.fld input,.fld select,.fld textarea{padding:9px 12px;border:1px solid var(--line);border-radius:var(--r);font-size:13px;background:var(--paper);outline:none}
+.fld input:focus,.fld select:focus{border-color:var(--forest)}
+/* Toast */
+.tw{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--cream);border:1px solid var(--line);border-radius:var(--r2);padding:11px 15px;font-size:13px;box-shadow:0 12px 40px rgba(28,26,20,.2);display:flex;align-items:center;gap:9px;animation:fu .3s ease both;min-width:250px}
+.toast.s{border-left:3px solid var(--forest)}.toast.e{border-left:3px solid var(--rust)}.toast.i{border-left:3px solid #2a5a6e}
+@media(max-width:768px){.sb{display:none}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<!-- MODAL -->
+<div class="mo" id="mo" onclick="if(event.target===this)cM()">
+  <div class="mc">
+    <div class="mc-h"><span id="m-t">Action</span><button onclick="cM()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--mist)">✕</button></div>
+    <div id="m-b"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn btn-o" onclick="cM()">Annuler</button>
+      <button class="btn btn-f" onclick="sM()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+<div class="tw" id="tw"></div>
+<div class="sb">
+  <div class="sb-logo"><div class="sb-em">📚</div><div class="sb-name">BiblioTrop</div></div>
+  <nav class="sb-nav">
+    <div class="sb-g">Principal</div>
+    <button class="sb-l active" data-s="home"    onclick="go('home',this)">🏠 Accueil</button>
+    <button class="sb-l" data-s="cat"    onclick="go('cat',this)">📖 Catalogue</button>
+    <button class="sb-l" data-s="emp"    onclick="go('emp',this)">🔄 Emprunts</button>
+    <button class="sb-l" data-s="ret"    onclick="go('ret',this)">↩️ Retours</button>
+    <div class="sb-g">Gestion</div>
+    <button class="sb-l" data-s="ab"     onclick="go('ab',this)">👤 Abonnés</button>
+    <button class="sb-l" data-s="inv"    onclick="go('inv',this)">📦 Inventaire</button>
+    <button class="sb-l" data-s="am"     onclick="go('am',this)">💳 Amendes</button>
+  </nav>
+</div>
+<div class="main">
+  <div class="topbar">
+    <div class="t-title" id="tt">Accueil</div>
+    <div class="t-right">
+      <div class="t-search" onclick="T('Recherche rapide','i')"><span style="color:var(--mist)">🔍</span><input placeholder="Rechercher…" readonly/></div>
+      <div class="ib" onclick="T('Notifications','i')">🔔</div>
+      <div class="ib" onclick="tTheme()">🌙</div>
+      <div class="u-chip"><div class="u-av">AA</div><span style="font-size:13px">Abena</span></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sec on" id="s-home">
+      <div style="background:#1c1a14;border-radius:14px;padding:32px;margin-bottom:22px;color:#fff;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(45,90,61,.4),transparent)"></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Bibliothèque Numérique</div>
+        <h1 style="font-family:var(--ffd);font-size:1.8rem;margin-bottom:8px">Gérez votre <em style="color:#6dbb8a">bibliothèque</em></h1>
+        <p style="color:rgba(255,255,255,.45);font-size:13px;margin-bottom:18px">Catalogue, emprunts, retours et statistiques en un tableau de bord.</p>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-f" onclick="go('emp')">🔄 Emprunts</button>
+          <button style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer" onclick="oM('Nouvel
+          style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer" onclick="oM('Nouvel emprunt','<div class=fld><label>Livre</label><select><option>Algorithmes et Structures</option><option>Anatomie Humaine</option></select></div><div class=fld><label>Abonné</label><input placeholder=Nom ou N° carte/></div>')">+ Emprunt</button>
+        </div>
+      </div>
+      <div class="kpi-row" id="kh"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div style="background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:18px">
+          <div style="font-family:var(--ffd);font-size:15px;margin-bottom:12px">Activité récente</div>
+          <div id="tl"></div>
+        </div>
+        <div style="background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:18px">
+          <div style="font-family:var(--ffd);font-size:15px;margin-bottom:12px">Plus empruntés</div>
+          <div id="tb"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec" id="s-cat">
+      <div style="display:flex;justify-content:space-between;margin-bottom:18px;align-items:center">
+        <h2 style="font-family:var(--ffd);font-size:18px">Catalogue</h2>
+        <button class="btn btn-f btn-sm" onclick="oM('Ajouter un livre','<div class=fld><label>Titre</label><input placeholder=Titre complet/></div><div class=fld><label>Auteur</label><input/></div><div class=fld><label>ISBN</label><input/></div>')">+ Ajouter livre</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <input class="fi" id="cq" placeholder="🔍 Titre, auteur, ISBN…" oninput="fCat()" style="flex:1"/>
+        <select class="fi" id="cc" onchange="fCat()"><option value="">Toutes catégories</option><option>Informatique</option><option>Médecine</option><option>Droit</option><option>Économie</option><option>Lettres</option></select>
+        <select class="fi" id="cs" onchange="fCat()"><option value="">Tous statuts</option><option>Disponible</option><option>Emprunté</option></select>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:16px" id="cg"></div>
+    </div>
+    <div class="sec" id="s-emp">
+      <div style="display:flex;justify-content:space-between;margin-bottom:18px;align-items:center">
+        <h2 style="font-family:var(--ffd);font-size:18px">Emprunts en cours</h2>
+        <button class="btn btn-f" onclick="oM('Nouvel emprunt','<div class=fld><label>Livre</label><select><option>Algorithmes et Structures</option><option>Anatomie Humaine</option></select></div><div class=fld><label>Abonné</label><input/></div><div class=fld><label>Retour prévu</label><input type=date/></div>')">+ Nouvel emprunt</button>
+      </div>
+      <div class="kpi-row" id="ke"></div>
+      <div class="tcard"><div class="thead"><span style="font-family:var(--ffd);font-size:14px;font-weight:700">Liste des emprunts</span><input class="fi" placeholder="Filtrer…" oninput="fT('te',this.value)"/></div><div style="overflow-x:auto"><table id="te"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="sec" id="s-ret">
+      <h2 style="font-family:var(--ffd);font-size:18px;margin-bottom:16px">Retours</h2>
+      <div style="background:linear-gradient(135deg,#1e3d2a,#2d5a3d);border-radius:14px;padding:22px;margin-bottom:20px;color:#fff">
+        <div style="font-family:var(--ffd);font-size:1.05rem;margin-bottom:6px">Retour rapide</div>
+        <div style="display:flex;gap:10px"><input id="rc" placeholder="Code emprunt…" style="padding:9px 12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:13px;outline:none;max-width:260px" onkeydown="if(event.key==='Enter')qR()"/><button onclick="qR()" style="background:var(--forest2);color:#fff;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px">Valider</button></div>
+      </div>
+      <div class="tcard"><div class="thead"><span style="font-family:var(--ffd);font-size:14px;font-weight:700">Historique retours</span><input class="fi" placeholder="Filtrer…" oninput="fT('tr',this.value)"/></div><div style="overflow-x:auto"><table id="tr"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="sec" id="s-ab">
+      <div style="display:flex;justify-content:space-between;margin-bottom:18px;align-items:center">
+        <h2 style="font-family:var(--ffd);font-size:18px">Abonnés</h2>
+        <button class="btn btn-f" onclick="oM('Nouvel abonné','<div class=fld><label>Nom</label><input/></div><div class=fld><label>Email</label><input type=email/></div><div class=fld><label>Catégorie</label><select><option>Étudiant</option><option>Enseignant</option></select></div>')">+ Nouvel abonné</button>
+      </div>
+      <div class="kpi-row" id="ka"></div>
+      <div class="tcard"><div class="thead"><span style="font-family:var(--ffd);font-size:14px;font-weight:700">Liste abonnés</span><input class="fi" placeholder="Filtrer…" oninput="fT('ta',this.value)"/></div><div style="overflow-x:auto"><table id="ta"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="sec" id="s-inv">
+      <h2 style="font-family:var(--ffd);font-size:18px;margin-bottom:18px">Inventaire</h2>
+      <div class="kpi-row" id="ki"></div>
+      <div class="tcard"><div class="thead"><span style="font-family:var(--ffd);font-size:14px;font-weight:700">Fonds documentaire</span><input class="fi" placeholder="Filtrer…" oninput="fT('ti',this.value)"/></div><div style="overflow-x:auto"><table id="ti"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="sec" id="s-am">
+      <div style="display:flex;justify-content:space-between;margin-bottom:18px;align-items:center">
+        <h2 style="font-family:var(--ffd);font-size:18px">Amendes</h2>
+        <button class="btn btn-f" style="background:var(--rust)" onclick="oM('Nouvelle amende','<div class=fld><label>Abonné</label><input/></div><div class=fld><label>Montant FCFA</label><input type=number/></div>')">+ Amende</button>
+
+      </div>
+      <div class="kpi-row" id="kam"></div>
+      <div class="tcard"><div class="thead"><span style="font- 
+      family:var(--ffd);font-size:14px;font-weight:700">Liste amendes</span><input class="fi" placeholder="Filtrer…" oninput="fT('tam',this.value)"/></div><div style="overflow-x:auto"><table id="tam"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+  <footer style="padding:14px 24px;border-top:1px solid var(--line);text-align:center;font-size:12px;color:var(--mist)">© 2025 BiblioTrop — Université des  Tropiques</footer>
+</div>
+
+</body>
+</html>
